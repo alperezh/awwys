@@ -1,0 +1,12 @@
+{
+  "name": "awwys-scripts",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "seed": "node seed.mjs"
+  },
+  "dependencies": {
+    "@sanity/client": "^6.21.3",
+    "dotenv": "^16.4.5"
+  }
+}

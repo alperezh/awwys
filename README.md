@@ -19,6 +19,11 @@ python3 -m http.server 8811     # http://localhost:8811/
 ├── index.html          # todas las secciones de la home
 ├── css/styles.css      # tokens de diseño + estilos (mobile first en los @media)
 ├── js/app.js           # personajes SVG, carrusel, menú, newsletter
+├── js/config.js        # Project ID de Sanity (público)
+├── js/sanity.js        # cliente de lectura + consulta GROQ
+├── js/cms.js           # hidrata textos e imágenes sobre el HTML de respaldo
+├── studio/             # Sanity Studio (esquemas del contenido)
+├── scripts/seed.mjs    # carga inicial de contenido
 ├── fonts/              # Caveat, Nunito Sans y Baloo 2 auto-hospedadas (woff2)
 └── img/favicon.svg
 ```
@@ -63,6 +68,56 @@ y los colores de los personajes; tipografías `--font-hand` (Caveat, rótulos
 manuscritos), `--font-ui` (Nunito Sans) y `--font-logo` (Baloo 2, logotipo con
 contorno). Cambiar la paleta desde ahí afecta a toda la página.
 
+## Contenido gestionable (Sanity)
+
+Misma arquitectura que The Funky Factory: el contenido vive en **Sanity**, el
+front lo pide **en runtime** con una sola consulta GROQ y, si el CMS no está
+configurado o falla, se queda con el **contenido de respaldo** del HTML (los
+personajes dibujados en SVG y los fondos de degradado). La web nunca se ve rota.
+
+```
+Navegador  ──►  js/cms.js  ──►  Sanity (API de lectura por CDN)
+                    │
+                    └─ si no hay respuesta: contenido de respaldo del HTML
+```
+
+### Qué imagen controla cada cosa
+
+| Documento en el Studio | Qué imagen gobierna |
+|---|---|
+| **Carrusel de portada** | fondo de cada slide (y su versión móvil) + la figura recortada |
+| **Paneles de imagen** | las seis fotos grandes: tres de la franja de colección y tres de "our world" |
+| **Personajes** | la foto de cada Awwy, en la rejilla y allí donde se le enlace |
+| **Franja de iconos** | los cuatro iconos bajo el carrusel |
+| **Configuración del sitio** | logotipo y favicon |
+
+Cada campo de imagen es opcional: mientras esté vacío se usa el dibujo o el
+degradado. Se pueden ir sustituyendo de una en una según lleguen las fotos
+reales, sin tocar código.
+
+### Puesta en marcha
+
+```bash
+cd studio
+npm install
+npx sanity init            # login → crea proyecto → te da el PROJECT ID
+cp .env.example .env       # pega el SANITY_STUDIO_PROJECT_ID
+npm run dev                # Studio en http://localhost:3333
+npm run deploy             # para dejarlo en https://<nombre>.sanity.studio
+```
+
+Carga inicial de textos (idéntica a lo que hay hoy en el HTML, sin imágenes),
+para que el Studio no arranque vacío:
+
+```bash
+cd scripts
+cp .env.example .env       # PROJECT ID + token Editor (sanity.io/manage → API → Tokens)
+npm install && npm run seed
+```
+
+Y por último, conectar el front: pega el Project ID en `js/config.js`. Mientras
+esté vacío, la web sigue usando el contenido de respaldo.
+
 ## Despliegue en Vercel
 
 Sitio estático puro: **sin build, sin framework**. En Vercel se importa el repo
@@ -89,4 +144,5 @@ Vercel para el ápex y un `CNAME` para `www`). El HTTPS lo gestiona Vercel.
 - Fotografía real de producto y packaging en lugar de los SVG y los degradados.
 - Páginas internas: shop, ficha de personaje, our world, about.
 - Conectar catálogo y carrito (se puede reaprovechar el backend de The Funky Factory).
+- Subir las fotos reales desde el Studio, sustituyendo los dibujos de respaldo.
 - Copys definitivos y versión en castellano.

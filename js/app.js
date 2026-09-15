@@ -210,9 +210,16 @@
     form.addEventListener('submit', e => {
       e.preventDefault();
       form.reset();
-      document.querySelector('[data-news-note]').textContent = "You're in! Welcome to the Awwy club ♡";
+      document.querySelector('[data-news-note]').textContent =
+        document.documentElement.dataset.newsOk || "You're in! Welcome to the Awwy club ♡";
     });
   }
+
+  /* ── API mínima para la capa del CMS ────────────────── */
+  window.AwwysArte = {
+    svgPorNumero: (n) => awwySVG(byId(String(n).padStart(2, '0'))),
+    personajes: AWWYS,
+  };
 
   /* ── Detalles ───────────────────────────────────────── */
   const year = document.querySelector('[data-year]');
