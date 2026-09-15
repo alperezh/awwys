@@ -63,6 +63,27 @@ y los colores de los personajes; tipografías `--font-hand` (Caveat, rótulos
 manuscritos), `--font-ui` (Nunito Sans) y `--font-logo` (Baloo 2, logotipo con
 contorno). Cambiar la paleta desde ahí afecta a toda la página.
 
+## Despliegue en Vercel
+
+Sitio estático puro: **sin build, sin framework**. En Vercel se importa el repo
+y se deja *Framework Preset* en `Other`, *Build Command* vacío y *Output
+Directory* en la raíz (`.`). Cada push a `main` publica.
+
+Desde la máquina de uno, sin pasar por la UI:
+
+```bash
+npx vercel          # primera vez: pregunta y crea el proyecto (preview)
+npx vercel --prod   # publica en producción
+```
+
+`vercel.json` fija dos cosas: cabeceras de caché de un año para `fonts/`
+(inmutables, van con hash de contenido en el nombre) y `cleanUrls`, para que las
+páginas que añadamos se sirvan sin `.html` (`/shop` en vez de `/shop.html`).
+
+Para `awwys.com`: *Project → Settings → Domains*, añadir el dominio y apuntar
+el DNS del registrador a los valores que indique Vercel (un `A` a la IP de
+Vercel para el ápex y un `CNAME` para `www`). El HTTPS lo gestiona Vercel.
+
 ## Pendiente (siguientes iteraciones)
 
 - Fotografía real de producto y packaging en lugar de los SVG y los degradados.
