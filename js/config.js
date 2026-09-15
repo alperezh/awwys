@@ -10,7 +10,7 @@
  */
 window.AWWYS = {
   sanity: {
-    projectId: '',            // <-- pega aquí el Project ID de Sanity
+    projectId: '3fsn8pd0',   // Project ID de Sanity (público)
     dataset: 'production',
     apiVersion: '2024-01-01',
   },
