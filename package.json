@@ -1,0 +1,9 @@
+{
+  "name": "awwys",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Awwy's — sitio estático (sin build: se sirven los ficheros tal cual)",
+  "scripts": {
+    "dev": "python3 -m http.server 8811"
+  }
+}
