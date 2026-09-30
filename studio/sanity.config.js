@@ -7,7 +7,7 @@ import { estructura } from './structure';
 export default defineConfig({
   name: 'awwys',
   title: "Awwy's",
-  projectId: process.env.SANITY_STUDIO_PROJECT_ID,
+  projectId: process.env.SANITY_STUDIO_PROJECT_ID || '3fsn8pd0',
   dataset: process.env.SANITY_STUDIO_DATASET || 'production',
   plugins: [structureTool({ structure: estructura }), visionTool()],
   schema: { types: schemaTypes },
